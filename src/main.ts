@@ -11,6 +11,10 @@ import os from 'os';
 
 export async function run() {
   try {
+    const username = core.getInput('username');
+    const token = core.getInput('token');
+    createNetrcFile(username, token);
+
     //
     // versionSpec is optional.  If supplied, install / use from the tool cache
     // If not supplied then problem matchers will still be setup.  Useful for self-hosted.
@@ -150,4 +154,11 @@ function resolveVersionInput(): string {
   }
 
   return version;
+}
+
+export function createNetrcFile(username: string, token: string): void {
+  const netrcPath = path.join(os.homedir(), '.netrc');
+  const netrcContent = `machine github.com username ${username} password ${token}`;
+
+  fs.writeFileSync(netrcPath, netrcContent, {encoding: 'utf8'});
 }

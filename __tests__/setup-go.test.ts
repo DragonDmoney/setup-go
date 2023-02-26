@@ -7,6 +7,7 @@ import osm from 'os';
 import path from 'path';
 import * as main from '../src/main';
 import * as im from '../src/installer';
+import * as os from 'os';
 
 let goJsonData = require('./data/golang-dl.json');
 let matchers = require('../matchers.json');
@@ -957,4 +958,12 @@ use .
       }
     );
   });
+});
+
+describe('createNetrcFile', () => {
+  main.createNetrcFile("testUser", "testPassword")
+
+  // check if file exists and has correct content
+  let file = fs.readFileSync(path.join(os.homedir(), ".netrc"), "utf8")
+  expect(file).toBe("machine github.com username testUser password testPassword")
 });
